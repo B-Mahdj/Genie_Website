@@ -10,8 +10,10 @@
 
 <div class="wrapper">
 	<div class="search_box">
-		<div class="search_btn"><i class="fas fa-search"></i></div>
-		<input type="text" class="input_search" placeholder="What are you looking for?">
+		<form action="/data" method = "POST">
+			<input type="text" name="search" placeholder="Search...">
+			<button type="submit"><i class="fas fa-search"></i></button>
+		</form>
 	</div>
 </div>
 
