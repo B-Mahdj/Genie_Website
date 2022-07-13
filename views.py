@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-import main from webPaper.py
+from webPaper import main
 
 views = Blueprint(__name__, "views")
 
@@ -15,4 +15,5 @@ def data():
         return f"The URL /data is accessed directly. Try going to '/form' to submit form"
     if request.method == 'POST':
         form_data = request.form
+        main(form_data)
         return f"The form data is: {form_data}"
