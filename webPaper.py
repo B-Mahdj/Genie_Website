@@ -75,8 +75,6 @@ def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
 #
 
 
-
-
 # Shows the Paper Summary from GPT-3
 def showPaperSummary(paperContent):
     tldr_tag = "\n Tl;dr"
@@ -86,18 +84,8 @@ def showPaperSummary(paperContent):
     # Loop through all the pages of the paper and concatenate the text
     for page in numberPages:
         text += page.extract_text()
-
-    # print("The full text of the paper is : ", text)
-    try:
-        textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text).group()
-    except AttributeError:
-        textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text)
-    # print("The text before Introduction is : ", textBegin)
-    # select the text after the conclusion
-    try:
-        textEnd = re.search("(?=CONCLUSION\n|CONCLUSIONS\n)[\s\S]*", text).group()
-    except AttributeError:
-        textEnd = re.search("(?=CONCLUSION\n|CONCLUSIONS\n)[\s\S]*", text)
+        textBegin = text[0:CHARACTER_LIMIT]
+        textEnd = text[-CHARACTER_LIMIT:]
 
     if textBegin is not None and textEnd is not None:
         text = textBegin + textEnd
@@ -119,11 +107,11 @@ def showPaperSummary(paperContent):
 
 # Make sure the numbers of characters in text is under or equals the limited character
 def cut(text):
-    # If it is, then we return the text
-    # If it is not, then we cut the text and return the text
     if len(text) <= CHARACTER_LIMIT:
+        # If it is, then we return the text
         return text
     else:
+        # If it is not, then we cut the text and return the text cutted
         return text[:CHARACTER_LIMIT]
 
 
@@ -139,6 +127,7 @@ def main():
         print(f)
         paperContent = PdfFileReader(f)
         showPaperSummary(paperContent)
+
 
 def handle_error(status_code):
     pass
