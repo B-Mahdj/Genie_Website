@@ -7,97 +7,67 @@ Created on Sat Jul  9 16:07:46 2022
 """
 
 # Import the libraries
-
+import requests
 from PyPDF2 import PdfFileReader
-import urllib.request
 import openai
 import glob
 import re
+import json
 
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+api_key = "wuQ7GVHRhe1qCJljF8TPOyxnmbtSDdIL"
+api_endpoint = "https://api.core.ac.uk/v3"
 
-# Set inital Parameters
-## Enter your OpenAI API keys to run GPT-3 model
-## Remember to authorize the key before using it.
+# Set initial Parameters
+# Enter your OpenAI API keys to run GPT-3 model
+# Remember to authorize the key before using it.
 openai.api_key = "YOUR_APP_KEY"
 
 ## Charater_limit is set in order to avoid the maxing token request
 CHARACTER_LIMIT = 3000
 
-## search variable in the search field
-search_for = "game theory"
-
 ## how many number of pdf downloads are needed ?
-number_of_pdf_downloads = 5
+NUMBER_OF_PDF_DOWNLOADS = 5
 
-#
+
+def pretty_json(obj):
+    print(json.dumps(obj, indent=4))
+
+
 # ---------------------- PART 1 ----------------------
-# Comment from here
-#
-#
-#
-#
-#
-# Webscrapping
-## Webdriver for selenium
-## Using chrome webdriver,
-driver = webdriver.Chrome(executable_path='driver/chromedriver.exe')
-driver.implicitly_wait(0.5)
-driver.maximize_window()
-## url in use
-driver.get('https://arxiv.org/')
+# This function receive a topic and search for the papers in the topic
+# It will download the papers and save them in the folder named "papers"
+# The files will be download for the CORE API that is an API that is used to search for research papers
 
-## search for the text and click the search button
-WebDriverWait(driver, 20).until(
-    EC.element_to_be_clickable((By.XPATH, '//*[@id="header"]/div[2]/form/div/div[1]/input'))).send_keys(search_for)
-
-search_button = driver.find_element_by_xpath('//*[@id="header"]/div[2]/form/div/button')
-search_button.click()
-
-# Implement no search found reply if search not found
-#
-# if not found, ask the user to what to do?
-#
+def get_papers(topic):
+    results, elapsed = query_core_api("/search/outputs", topic)
+    print(f"The search took {elapsed} seconds")
+    print(f"The results are: ")
+    pretty_json(results)
+    for result in results["results"]:
+        print(f"Result is : {result}")
+        download_pdf(result.sourceFulltextUrls[0])
 
 
-links = []
-elems = driver.find_elements_by_tag_name('a')
-for elem in elems:
-    href = elem.get_attribute('href')
-    if href is not None:
-        if bool(re.search("https:\/\/arxiv.org\/pdf\/.*", href)):
-            links.append(href)
-
-titles = []
-for i in range(len(links)):
-    content_link = '//*[@id="main-container"]/div[2]/ol/li[{}]/p[1]'.format(i + 1)
-    title = driver.find_element_by_xpath(content_link).text
-    titles.append(title)
+def download_pdf(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.content
+    else:
+        print(f"Error code {response.status_code}, {response.content}")
+        handle_error(response.status_code)
 
 
-def download_file(download_url, filename):
-    response = urllib.request.urlopen(download_url)
-    file = open(filename + ".pdf", 'wb')
-    file.write(response.read())
-    file.close()
+def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
+    headers = {"Authorization": "Bearer " + api_key}
+    query = {"q": query, "limit": limit}
+    response = requests.post(f"{api_endpoint}{url_fragment}", data=json.dumps(query), headers=headers)
+    if response.status_code == 200:
+        return response.json(), response.elapsed.total_seconds()
+    else:
+        print(f"Error code {response.status_code}, {response.content}")
+        handle_error(response.status_code)
 
 
-# Download the first 5 pdf from the site
-for i in range(number_of_pdf_downloads):
-    download_file(links[i], titles[i])
-
-print("Successfully downloaded all the files as requested")
-
-##  Stop commenting to test the part 2 of the progam
-#
-#
-# ------------ Webscrapping is done here -------------
-#
-#
-#
 # ---------------------- PART 2 ----------------------
 #
 
@@ -163,7 +133,6 @@ def cut(text):
         return text[:CHARACTER_LIMIT]
 
 
-print('Files are now loading')
 # reads all the pdf files in the folder
 for f in files:
     print()
@@ -172,6 +141,13 @@ for f in files:
     showPaperSummary(paperContent)
 
 
-def main(topic):
-    print("Topic is: ", topic)
-    print("Main launched")
+def main():
+    get_papers("Machine Learning")
+    return None
+
+
+def handle_error(status_code):
+    pass
+
+
+main()
