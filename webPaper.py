@@ -14,10 +14,11 @@ import glob
 import re
 import json
 import os
+from pathlib import Path
 
 API_KEY_CORE_API = "wuQ7GVHRhe1qCJljF8TPOyxnmbtSDdIL"
 API_ENDPOINT_CORE_API = "https://api.core.ac.uk/v3"
-OUTPUT_PDF = '.\pdfs'
+OUTPUT_PDF = "pdfs"
 
 # Set initial Parameters
 # Enter your OpenAI API keys to run GPT-3 model
@@ -52,7 +53,7 @@ def get_papers(topic):
         filename = generate_filename(result["title"])
         download_success = download_pdf(result["downloadUrl"], filename)
         if download_success:
-            paper_info = "Title : " + result["title"] + " Url : " + result["downloadUrl"]
+            paper_info = "Title : " + result["title"] + ", Url : " + result["downloadUrl"]
             papersInfo.append(paper_info)
 
     return papersInfo
@@ -66,7 +67,9 @@ def generate_filename(filename):
 def download_pdf(url, filename):
     response = requests.get(url)
     if response.status_code == 200:
-        file_path = os.path.join(OUTPUT_PDF, os.path.basename(filename))
+        file_path = os.path.join(os.getcwd(), OUTPUT_PDF, os.path.basename(filename))
+        file_path = Path(file_path)
+        print(file_path)
         with open(file_path, "wb") as file:
             file.write(response.content)
             return True
@@ -174,6 +177,10 @@ def handle_error(status_code):
 def delete_file(file):
     os.remove(file)
 
+
+files = [f for f in os.listdir('.') if os.path.isfile(f)]
+for f in files:
+    print(f)
 
 resultOfMain = main("Machine Learning")
 print(resultOfMain)
