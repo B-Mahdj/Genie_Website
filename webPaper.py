@@ -46,13 +46,13 @@ def get_papers(topic):
     print(f"The results are: ")
     pretty_json(results)
     for result in results["results"]:
-        download_pdf(result["downloadUrl"])
+        download_pdf(result["downloadUrl"], result["title"])
 
 
-def download_pdf(url):
+def download_pdf(url, filename):
     response = requests.get(url)
     if response.status_code == 200:
-        file_path = os.path.join(OUTPUT_PDF, os.path.basename(url))
+        file_path = os.path.join(OUTPUT_PDF, os.path.basename(filename))
         with open(file_path, "wb") as file:
             file.write(response.content)
     else:
@@ -76,7 +76,7 @@ def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
 
 
 # Shows the Paper Summary from GPT-3
-def showPaperSummary(paperContent):
+def getPaperSummary(paperContent):
     tldr_tag = "\n Tl;dr"
     text = ""
 
@@ -84,10 +84,19 @@ def showPaperSummary(paperContent):
     # Loop through all the pages of the paper and concatenate the text
     for page in numberPages:
         text += page.extract_text()
-        textBegin = text[0:CHARACTER_LIMIT]
-        textEnd = text[-CHARACTER_LIMIT:]
+
+    try:
+        textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text).group()
+    except AttributeError:
+        textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text)
+
+    textEnd = text[-CHARACTER_LIMIT:]
 
     if textBegin is not None and textEnd is not None:
+        text = textBegin + textEnd
+    else:
+        textBegin = text[0:CHARACTER_LIMIT]
+        textEnd = text[-CHARACTER_LIMIT:]
         text = textBegin + textEnd
     if text is not None:
         text = cut(text)
@@ -103,15 +112,16 @@ def showPaperSummary(paperContent):
                                         )
     print("The response is:")
     print(response["choices"][0]["text"])
+    return response["choices"][0]["text"]
 
 
-# Make sure the numbers of characters in text is under or equals the limited character
 def cut(text):
+    # Make sure the numbers of characters in text is under or equals the limited character
     if len(text) <= CHARACTER_LIMIT:
         # If it is, then we return the text
         return text
     else:
-        # If it is not, then we cut the text and return the text cutted
+        # If it is not, then we cut the text and return the text
         return text[:CHARACTER_LIMIT]
 
 
@@ -123,10 +133,9 @@ def main():
 
     # reads all the pdf files in the folder
     for f in files:
-        print()
         print(f)
         paperContent = PdfFileReader(f)
-        showPaperSummary(paperContent)
+        summaryOfPaper = getPaperSummary(paperContent)
 
 
 def handle_error(status_code):
