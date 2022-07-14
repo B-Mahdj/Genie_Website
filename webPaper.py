@@ -91,7 +91,6 @@ def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
 
 
 # ---------------------- PART 2 ----------------------
-#
 
 
 # Shows the Paper Summary from GPT-3
@@ -176,11 +175,3 @@ def handle_error(status_code):
 
 def delete_file(file):
     os.remove(file)
-
-
-files = [f for f in os.listdir('.') if os.path.isfile(f)]
-for f in files:
-    print(f)
-
-resultOfMain = main("Machine Learning")
-print(resultOfMain)
