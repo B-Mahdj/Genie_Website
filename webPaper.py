@@ -40,13 +40,22 @@ def pretty_json(obj):
 # It will download the papers and save them in the folder named "papers"
 # The files will be downloaded for the CORE API that is an API that is used to get research papers
 
+
 def get_papers(topic):
     results, elapsed = query_core_api("/search/works", topic)
     print(f"The search took {elapsed} seconds")
     print(f"The results are: ")
     pretty_json(results)
+
     for result in results["results"]:
-        download_pdf(result["downloadUrl"], result["title"])
+        filename = generate_filename(result["title"])
+        download_pdf(result["downloadUrl"], filename)
+        paper_info = {result["title"]: result["downloadUrl"]}
+
+
+def generate_filename(filename):
+    good_filename = ''.join(e for e in filename if e.isalnum())
+    return good_filename + ".pdf"
 
 
 def download_pdf(url, filename):
@@ -125,21 +134,29 @@ def cut(text):
         return text[:CHARACTER_LIMIT]
 
 
-def main():
-    get_papers("Machine Learning")
+def main(topic):
+    # Create a variable to store the papers name and the summary
+    papers = []
+    # Get the papers from the topic
+    get_papers(topic)
 
     # Reads all the pdf in the pdfs directory
-    files = glob.glob(OUTPUT_PDF + "/*.pdf")
+    files = glob.glob(OUTPUT_PDF + "/*")
 
     # reads all the pdf files in the folder
     for f in files:
         print(f)
         paperContent = PdfFileReader(f)
         summaryOfPaper = getPaperSummary(paperContent)
+        delete_file(f)
 
 
 def handle_error(status_code):
     pass
 
 
-main()
+def delete_file(file):
+    os.remove(file)
+
+
+main("Machine Learning")
