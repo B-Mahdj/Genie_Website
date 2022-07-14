@@ -46,11 +46,16 @@ def get_papers(topic):
     print(f"The search took {elapsed} seconds")
     print(f"The results are: ")
     pretty_json(results)
+    papersInfo = []
 
     for result in results["results"]:
         filename = generate_filename(result["title"])
-        download_pdf(result["downloadUrl"], filename)
-        paper_info = {result["title"]: result["downloadUrl"]}
+        download_success = download_pdf(result["downloadUrl"], filename)
+        if download_success:
+            paper_info = "Title : " + result["title"] + " Url : " + result["downloadUrl"]
+            papersInfo.append(paper_info)
+
+    return papersInfo
 
 
 def generate_filename(filename):
@@ -64,9 +69,11 @@ def download_pdf(url, filename):
         file_path = os.path.join(OUTPUT_PDF, os.path.basename(filename))
         with open(file_path, "wb") as file:
             file.write(response.content)
+            return True
     else:
         print(f"Error code {response.status_code}, {response.content}")
         handle_error(response.status_code)
+        return False
 
 
 def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
@@ -135,20 +142,29 @@ def cut(text):
 
 
 def main(topic):
-    # Create a variable to store the papers name and the summary
-    papers = []
     # Get the papers from the topic
-    get_papers(topic)
+    papersInfo = get_papers(topic)
+    print("The papers are:")
+    print(papersInfo)
 
     # Reads all the pdf in the pdfs directory
     files = glob.glob(OUTPUT_PDF + "/*")
+
+    summaries = []
 
     # reads all the pdf files in the folder
     for f in files:
         print(f)
         paperContent = PdfFileReader(f)
         summaryOfPaper = getPaperSummary(paperContent)
+        summaries.append(summaryOfPaper)
         delete_file(f)
+
+    # Merge the papersInfo array and the summaries array into one key value pair
+    papersInfoAndSummaries = []
+    for i in range(len(papersInfo)):
+        papersInfoAndSummaries.append({"paperInfo": papersInfo[i], "summary": summaries[i]})
+    return papersInfoAndSummaries
 
 
 def handle_error(status_code):
@@ -159,4 +175,5 @@ def delete_file(file):
     os.remove(file)
 
 
-main("Machine Learning")
+resultOfMain = main("Machine Learning")
+print(resultOfMain)
