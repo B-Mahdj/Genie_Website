@@ -29,11 +29,11 @@ openai.api_key = "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"
 CHARACTER_LIMIT = 3000
 
 # how many number of pdf downloads are needed ?
-NUMBER_OF_PDF_DOWNLOADS = 5
+NUMBER_OF_PDF_DOWNLOADS = 2
 
 
 def pretty_json(obj):
-    print(json.dumps(obj, indent=4))
+    return json.dumps(obj, indent=4)
 
 
 # ---------------------- PART 1 ----------------------
@@ -46,7 +46,7 @@ def get_papers(topic):
     results, elapsed = query_core_api("/search/works", topic)
     print(f"The search took {elapsed} seconds")
     print(f"The results are: ")
-    pretty_json(results)
+    print(pretty_json(results))
     papersInfo = []
 
     for result in results["results"]:
@@ -61,6 +61,10 @@ def get_papers(topic):
 
 def generate_filename(filename):
     good_filename = ''.join(e for e in filename if e.isalnum())
+    # Shorter the filename to make it under 20 characters
+    if len(good_filename) > 20:
+        good_filename = good_filename[:20]
+
     return good_filename + ".pdf"
 
 
@@ -156,16 +160,24 @@ def main(topic):
 
     # reads all the pdf files in the folder
     for f in files:
-        print(f)
-        paperContent = PdfFileReader(f)
-        summaryOfPaper = getPaperSummary(paperContent)
-        summaries.append(summaryOfPaper)
-        delete_file(f)
+        try:
+            print(f)
+            paperContent = PdfFileReader(f)
+            summaryOfPaper = getPaperSummary(paperContent)
+            summaries.append(summaryOfPaper)
+            delete_file(f)
+        except Exception as e:
+            print(e)
+            print("Error reading the pdf file")
+            delete_file(f)
+            continue
 
     # Merge the papersInfo array and the summaries array into one key value pair
     papersInfoAndSummaries = []
-    for i in range(len(papersInfo)):
+    for i in range(len(papersInfo) & len(summaries)):
         papersInfoAndSummaries.append({"paperInfo": papersInfo[i], "summary": summaries[i]})
+
+    # Transform the papersInfoAndSummaries array into a json for html return
     return papersInfoAndSummaries
 
 
