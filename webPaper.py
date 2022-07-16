@@ -15,21 +15,24 @@ import re
 import json
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-API_KEY_CORE_API = "wuQ7GVHRhe1qCJljF8TPOyxnmbtSDdIL"
+load_dotenv()  # take environment variables from .env.
+
+API_KEY_CORE_API = os.environ.get('CORE_API_KEY')
 API_ENDPOINT_CORE_API = "https://api.core.ac.uk/v3"
 OUTPUT_PDF = "pdfs"
 
 # Set initial Parameters
 # Enter your OpenAI API keys to run GPT-3 model
 # Remember to authorize the key before using it.
-openai.api_key = "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"
+openai.api_key = os.environ.get('OPEN_AI_API_KEY')
 
 # Character_limit is set in order to avoid the maxing token request
 CHARACTER_LIMIT = 3000
 
 # how many number of pdf downloads are needed ?
-NUMBER_OF_PDF_DOWNLOADS = 2
+NUMBER_OF_PDF_DOWNLOADS = 3
 
 
 def pretty_json(obj):
