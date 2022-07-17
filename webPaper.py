@@ -83,6 +83,7 @@ def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
 def getPaperSummary(paperContent):
     tldr_tag = "\n Tl;dr"
     text = ""
+    textBegin = None
 
     print("The paper content is:")
     print(reprlib.repr(paperContent))
@@ -92,9 +93,10 @@ def getPaperSummary(paperContent):
         text += page
 
     try:
-        textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text).group()
-    except AttributeError:
-        textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text)
+        textBegin = re.search("^[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text).group()
+    except Exception as e:
+        print("No introduction found")
+        print(e)
 
     textEnd = text[-CHARACTER_LIMIT:]
 
