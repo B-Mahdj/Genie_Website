@@ -32,7 +32,7 @@ openai.api_key = os.environ.get('OPEN_AI_API_KEY')
 CHARACTER_LIMIT = 3000
 
 # how many number of pdf downloads are needed ?
-NUMBER_OF_PDF_DOWNLOADS = 3
+NUMBER_OF_PDF_DOWNLOADS = 4
 
 
 def pretty_json(obj):
