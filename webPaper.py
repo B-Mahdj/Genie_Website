@@ -8,20 +8,17 @@ Created on Sat Jul  9 16:07:46 2022
 
 # Import the libraries
 import requests
-from PyPDF2 import PdfFileReader
 import openai
-import glob
 import re
 import json
 import os
-from pathlib import Path
 from dotenv import load_dotenv
+import reprlib
 
 load_dotenv()  # take environment variables from .env.
 
 API_KEY_CORE_API = os.environ.get('CORE_API_KEY')
 API_ENDPOINT_CORE_API = "https://api.core.ac.uk/v3"
-OUTPUT_PDF = "pdfs"
 
 # Set initial Parameters
 # Enter your OpenAI API keys to run GPT-3 model
@@ -32,7 +29,9 @@ openai.api_key = os.environ.get('OPEN_AI_API_KEY')
 CHARACTER_LIMIT = 3000
 
 # how many number of pdf downloads are needed ?
-NUMBER_OF_PDF_DOWNLOADS = 4
+NUMBER_OF_PDF_DOWNLOADS = 3
+
+MAX_NUMBER_OF_CHARACTERS_IN_PAPERS = 100000
 
 
 def pretty_json(obj):
@@ -49,41 +48,21 @@ def get_papers(topic):
     results, elapsed = query_core_api("/search/works", topic)
     print(f"The search took {elapsed} seconds")
     print(f"The results are: ")
-    print(pretty_json(results))
+    print(reprlib.repr(results))
     papersInfo = []
+    papersText = []
 
     for result in results["results"]:
-        filename = generate_filename(result["title"])
-        download_success = download_pdf(result["downloadUrl"], filename)
-        if download_success:
+        print(len(result["fullText"]))
+        if "fullText" in result is not None and len(result["fullText"]) <= MAX_NUMBER_OF_CHARACTERS_IN_PAPERS:
+            # filename = generate_filename(result["title"])
+            # download_success = download_pdf(result["downloadUrl"], filename)
+            # if download_success:
             paper_info = "Title : " + result["title"] + ", Url : " + result["downloadUrl"]
             papersInfo.append(paper_info)
+            papersText.append(result["fullText"])
 
-    return papersInfo
-
-
-def generate_filename(filename):
-    good_filename = ''.join(e for e in filename if e.isalnum())
-    # Shorter the filename to make it under 20 characters
-    if len(good_filename) > 20:
-        good_filename = good_filename[:20]
-
-    return good_filename + ".pdf"
-
-
-def download_pdf(url, filename):
-    response = requests.get(url)
-    if response.status_code == 200:
-        file_path = os.path.join(os.getcwd(), OUTPUT_PDF, os.path.basename(filename))
-        file_path = Path(file_path)
-        print(file_path)
-        with open(file_path, "wb") as file:
-            file.write(response.content)
-            return True
-    else:
-        print(f"Error code {response.status_code}, {response.content}")
-        handle_error(response.status_code)
-        return False
+    return papersInfo, papersText
 
 
 def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
@@ -105,10 +84,12 @@ def getPaperSummary(paperContent):
     tldr_tag = "\n Tl;dr"
     text = ""
 
-    numberPages = paperContent.pages
-    # Loop through all the pages of the paper and concatenate the text
-    for page in numberPages:
-        text += page.extract_text()
+    print("The paper content is:")
+    print(reprlib.repr(paperContent))
+
+    # For loop to read all the text from the array paperContent
+    for page in paperContent:
+        text += page
 
     try:
         textBegin = re.search("[\s\S]*?(?=INTRODUCTION|INTRODUCTIONS)", text).group()
@@ -152,28 +133,16 @@ def cut(text):
 
 def main(topic):
     # Get the papers from the topic
-    papersInfo = get_papers(topic)
-    print("The papers are:")
+    papersInfo, papersTexts = get_papers(topic)
+    print("The papers infos are:")
     print(papersInfo)
-
-    # Reads all the pdf in the pdfs directory
-    files = glob.glob(OUTPUT_PDF + "/*")
+    print("The papers text are:")
+    print(papersTexts)
 
     summaries = []
-
-    # reads all the pdf files in the folder
-    for f in files:
-        try:
-            print(f)
-            paperContent = PdfFileReader(f)
-            summaryOfPaper = getPaperSummary(paperContent)
-            summaries.append(summaryOfPaper)
-            delete_file(f)
-        except Exception as e:
-            print(e)
-            print("Error reading the pdf file")
-            delete_file(f)
-            continue
+    for paper in papersTexts:
+        summaryOfPaper = getPaperSummary(paper)
+        summaries.append(summaryOfPaper)
 
     # Merge the papersInfo array and the summaries array into one key value pair
     papersInfoAndSummaries = []
@@ -186,7 +155,3 @@ def main(topic):
 
 def handle_error(status_code):
     pass
-
-
-def delete_file(file):
-    os.remove(file)

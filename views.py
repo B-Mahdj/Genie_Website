@@ -9,9 +9,6 @@ def pretty_return(return_value):
     print("The return is :")
     print(return_value)
     for i in return_value:
-        print(i)
-        print(i["paperInfo"])
-        print(i["summary"])
         string_to_return += "<h3>" + i["paperInfo"] + "</h3>"
         string_to_return += "<p>" + i["summary"] + "</p>"
 
