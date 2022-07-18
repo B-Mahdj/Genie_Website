@@ -17,7 +17,7 @@ def pretty_return(return_value):
 
 @views.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('homePage.html')
 
 
 @views.route('/data/', methods=['POST', 'GET'])
