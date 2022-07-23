@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>GENIE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/homePageStyle.css') }}">
 
 </head>
@@ -15,26 +16,12 @@
                 <div class="search">
                     <form action="/data" method = "POST">
 			            <input id="search" type="search" class="srch" name="topic" placeholder="Search...">
-			             <button type="submit" class="btn"><i class="fas fa-search"></i></button>
+			             <button type="submit" class="btn"><i class="fa fa-search"></i></button>
 		            </form>
                 </div>
             </div>
 
-                    <p class="par">Accelerate the new knowledge </p>
-        </div>
-
-
-    </div>
-
-
-
-         <form action="/action_page.php">
-        <label for="myfile">Select a file:</label>
-         <input type="file" id="myfile" name="myfile"><br><br>
-         <button class="btnn"><a href="#">SUBMIT</a></button>
-         </form>
-         Summary:<output name="result"></output>
-                </div>
+            <p class="par">Accelerate the new knowledge </p>
         </div>
     </div>
 

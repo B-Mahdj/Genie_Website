@@ -85,7 +85,6 @@ ul li a:hover{
 .btn{
     width: 100px;
     height: 40px;
-    background: #ffffff;
     border: 2px solid #ffffff;
     margin-top: 13px;
     color: rgb(0, 0, 0);
@@ -117,13 +116,6 @@ ul li a:hover{
 
 .content .par{
     text-align: center;
-    /*
-    padding-left: 60px;
-    padding-bottom: 600px;
-    font-family: Arial;
-    letter-spacing: 12px;
-    line-height: 30px;
-    background-image: url('ssss.png');*/
 }
 
 .content h1{
@@ -210,28 +202,6 @@ ul li a:hover{
     color: #fff;
     font-family: Arial;
 }
-
-.btnn{
-    width: 240px;
-    height: 40px;
-    background: #ffffff;
-    border: none;
-    margin-top: 30px;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #fff;
-    transition: 0.4s ease;
-}
-.btnn:hover{
-    background: #fff;
-    color: #ff7200;
-}
-.btnn a{
-    text-decoration: none;
-    color: #000;
-    font-weight: bold;
-}
 .form .link{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 17px;
@@ -271,3 +241,11 @@ input {
     padding-top: 5px;
     transition: 0.3s ease;
  }
+
+  p {
+    color: #fff;
+    font-size: 30px;
+    padding-left: 14px;
+    padding-top: 5px;
+    transition: 0.3s ease;
+  }
