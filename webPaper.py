@@ -49,8 +49,9 @@ def get_papers(topic):
     print(f"The search took {elapsed} seconds")
     print(f"The results are: ")
     print(reprlib.repr(results))
-    papersInfo = []
+    papersTitle = []
     papersText = []
+    papersUrl = []
 
     for result in results["results"]:
         print(len(result["fullText"]))
@@ -58,11 +59,11 @@ def get_papers(topic):
             # filename = generate_filename(result["title"])
             # download_success = download_pdf(result["downloadUrl"], filename)
             # if download_success:
-            paper_info = "Title : " + result["title"] + ", Url : " + result["downloadUrl"]
-            papersInfo.append(paper_info)
+            papersTitle.append(result["title"])
+            papersUrl.append(result["downloadUrl"])
             papersText.append(result["fullText"])
 
-    return papersInfo, papersText
+    return papersTitle, papersText, papersUrl
 
 
 def query_core_api(url_fragment, query, limit=NUMBER_OF_PDF_DOWNLOADS):
@@ -135,22 +136,27 @@ def cut(text):
 
 def main(topic):
     # Get the papers from the topic
-    papersInfo, papersTexts = get_papers(topic)
-    print("The papers infos are:")
-    print(papersInfo)
+    papersTitle, papersTexts, papersUrl = get_papers(topic)
+    print("The papers title are:")
+    print(papersTitle)
     print("The papers text are:")
     print(papersTexts)
+    print("The papers url are:")
+    print(papersUrl)
 
     summaries = []
     for paper in papersTexts:
         summaryOfPaper = getPaperSummary(paper)
+        # Cut the first 2 characters in the string summaryOfPaper
+        summaryOfPaper = summaryOfPaper[2:]
         summaries.append(summaryOfPaper)
 
     # Merge the papersInfo array and the summaries array into one key value pair
     papersInfoAndSummaries = []
-    for i in range(len(papersInfo) & len(summaries)):
-        papersInfoAndSummaries.append({"paperInfo": papersInfo[i], "summary": summaries[i]})
+    for i in range(len(papersTitle) & len(summaries) & len(papersUrl)):
+        papersInfoAndSummaries.append({"Title": papersTitle[i], "Url": papersUrl[i], "summary": summaries[i]})
 
+    print("The papers info and summaries are:", papersInfoAndSummaries)
     # Transform the papersInfoAndSummaries array into a json for html return
     return papersInfoAndSummaries
 

@@ -16,7 +16,7 @@
                 <div class="search">
                     <form action="/data" method = "POST">
 			            <input id="search" type="search" class="srch" name="topic" placeholder="Search...">
-			             <button type="submit" class="btn"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn" id="submitbutton" onclick="this.disabled=true;this.value='Submitting...'; this.form.submit();"><i class="fa fa-search"></i></button>
 		            </form>
                 </div>
             </div>

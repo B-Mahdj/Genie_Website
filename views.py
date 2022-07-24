@@ -27,6 +27,6 @@ def data():
     if request.method == 'POST':
         form_data = request.form.get("topic")
         if form_data is not None:
-            return pretty_return(main(form_data))
+            return render_template('returnPage.html', datas=(main(form_data)))
         else:
             return "Please enter a topic"

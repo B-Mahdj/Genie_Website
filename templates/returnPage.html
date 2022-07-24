@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Genie Results</title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/returnPage.css') }}">
+
+  </head>
+  <body>
+
+    <h1>GENIE Results </h1>
+
+    <div class="main">
+      <ul>
+        {% for data in datas %}
+          <h2>{{ data.Title }}</h2>
+          <br>
+          <a href={{ data.Url }} target="_blank">Link to full PDF</a>
+          <p>{{ data.summary }}</p>
+          <br>
+          <br>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </body>
+</html>
