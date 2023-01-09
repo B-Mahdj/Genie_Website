@@ -29,7 +29,7 @@ openai.api_key = os.environ.get('OPEN_AI_API_KEY')
 CHARACTER_LIMIT = 3000
 
 # how many number of pdf downloads are needed ?
-NUMBER_OF_PDF_DOWNLOADS = 3
+NUMBER_OF_PDF_DOWNLOADS = 5
 
 MAX_NUMBER_OF_CHARACTERS_IN_PAPERS = 100000
 
@@ -111,7 +111,7 @@ def getPaperSummary(paperContent):
         text = cut(text)
         text += tldr_tag
     print("The AI will summarize the text below:", text)
-    response = openai.Completion.create(model="text-davinci-002",
+    response = openai.Completion.create(model="text-davinci-003",
                                         prompt=text,
                                         temperature=0,
                                         max_tokens=300,
