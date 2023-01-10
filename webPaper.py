@@ -111,14 +111,19 @@ def getPaperSummary(paperContent):
         text = cut(text)
         text += tldr_tag
     print("The AI will summarize the text below:", text)
-    response = openai.Completion.create(model="text-davinci-003",
-                                        prompt=text,
-                                        temperature=0,
-                                        max_tokens=300,
-                                        top_p=1,
-                                        frequency_penalty=0,
-                                        presence_penalty=0
-                                        )
+    try:
+        response = openai.Completion.create(model="text-davinci-003",
+                                            prompt=text,
+                                            temperature=0,
+                                            max_tokens=300,
+                                            top_p=1,
+                                            frequency_penalty=0,
+                                            presence_penalty=0
+                                            )
+    except Exception as e:
+        print("Exception thrown : " + e);
+        return "The engine was not able to load, probably due to an overload of requests"
+
     print("The response is:")
     print(response["choices"][0]["text"])
     return response["choices"][0]["text"]
