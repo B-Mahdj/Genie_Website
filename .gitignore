@@ -4,3 +4,4 @@ __pycache__
 pdfs/*
 !pdfs/.gitkeep
 .env
+Dockerfile
