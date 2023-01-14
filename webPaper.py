@@ -121,7 +121,7 @@ def getPaperSummary(paperContent):
                                             presence_penalty=0
                                             )
     except Exception as e:
-        print("Exception thrown : " + e);
+        print("Exception thrown : " + e.__str__())
         return "The engine was not able to load, probably due to an overload of requests"
 
     print("The response is:")
