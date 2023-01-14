@@ -16,7 +16,11 @@
                 <div class="search">
                     <form action="/data" method = "POST">
 			            <input id="search" type="search" class="srch" name="topic" placeholder="Search..." color="white">
-                        <button type="submit" class="btn" id="submitbutton" onclick="this.disabled=true;this.value='Submitting...'; this.form.submit();"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn" id="submitbutton" onclick="submitForm(this);"
+                                data-loading-text="<i class='fa fa-spinner fa-spin'></i>"
+                        >
+                            <i class="fa fa-search"></i>
+                        </button>
 		            </form>
                 </div>
             </div>
@@ -27,5 +31,21 @@
 
 
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script type="text/javascript">
+        function submitForm(btn) {
+            btn.form.submit();
+            btn.disabled = true;
+            btn.innerHTML = btn.getAttribute('data-loading-text');
+            btn.value="Submitting";
+            // submit form
+        }
+        function sendData(icon) {
+            console.log("print data");
+            icon.form.submit();
+            icon.classList.toggle('fa-pause');
+            icon.disabled=true;
+            icon.value='Submitting...';
+        }
+    </script>
 </body>
 </html>
