@@ -29,7 +29,7 @@ openai.api_key = os.environ.get('OPEN_AI_API_KEY')
 CHARACTER_LIMIT = 3000
 
 # how many number of pdf downloads are needed ?
-NUMBER_OF_PDF_DOWNLOADS = 5
+NUMBER_OF_PDF_DOWNLOADS = 3
 
 MAX_NUMBER_OF_CHARACTERS_IN_PAPERS = 100000
 
