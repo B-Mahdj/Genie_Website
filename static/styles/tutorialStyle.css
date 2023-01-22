@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background: linear-gradient(to top, rgb(0, 0, 0)50%,rgba(0, 0, 0)50%);
+}
+
+.content{
+    width: 1200px;
+    height: 500px;
+    margin: auto;
+    color: #fff;
+    position: relative;
+    text-align: center;
+        font-family: sans-serif;
+}
+
+.tutorialText{
+    font-size: 18px;
+    padding-top: 1%;
+}
+.content h1{
+    font-family: 'Times New Roman', serif;
+    font-size: 30px;
+}
+
+.home{
+    padding-top: 5%;
+    text-align: center;
+}
+
+.main{
+    padding-top: 10%;
+}

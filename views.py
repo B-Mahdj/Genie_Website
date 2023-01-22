@@ -30,3 +30,8 @@ def data():
             return render_template('returnPage.html', datas=(main(form_data)))
         else:
             return "Please enter a topic"
+
+
+@views.route('/tutorial')
+def tutorial():
+    return render_template('tutorial.html')
