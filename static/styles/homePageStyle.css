@@ -176,3 +176,19 @@ input {
     padding : 1%;
     font-size: 18px;
 }
+
+.info{
+    margin-top: 5%;
+    text-align: center;
+}
+
+.infoButton{
+    width: 100px;
+    height: 40px;
+    border: 2px solid #ffffff;
+    color: white;
+    transition: 0.2s ease;
+    cursor: pointer;
+    padding : 1%;
+    font-size: 18px;
+}

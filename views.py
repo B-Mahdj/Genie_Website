@@ -35,3 +35,8 @@ def data():
 @views.route('/tutorial')
 def tutorial():
     return render_template('tutorial.html')
+
+
+@views.route('/info')
+def info():
+    return render_template('infoPage.html')
