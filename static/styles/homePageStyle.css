@@ -162,12 +162,17 @@ input {
 }
 
 .tutorial{
-    width: 1200px;
-    height: 500px;
     margin-top: 10%;
-    color: white;
-    position: relative;
-    font-size: 20px;
     text-align: center;
-    position: fixed;
+}
+
+.tutorialButton{
+    width: 100px;
+    height: 40px;
+    border: 2px solid #ffffff;
+    color: white;
+    transition: 0.2s ease;
+    cursor: pointer;
+    padding : 1%;
+    font-size: 18px;
 }

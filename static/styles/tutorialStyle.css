@@ -34,3 +34,19 @@ body{
 .main{
     padding-top: 10%;
 }
+
+.home{
+    margin-top: 10%;
+    text-align: center;
+}
+
+.homeButton{
+    width: 100px;
+    height: 40px;
+    border: 2px solid #ffffff;
+    color: white;
+    transition: 0.2s ease;
+    cursor: pointer;
+    padding : 1%;
+    font-size: 18px;
+}
