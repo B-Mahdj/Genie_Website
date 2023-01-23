@@ -7,7 +7,35 @@
     </head>
 
     <body>
-
+        <div class="content">
+            <div class="row">
+                <div class="col-12">
+                    <h1>GENIE</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h2>Interested ? Submit your e-mail</h2>
+                </div>
+            </div>
+            <div class="row search" >
+                <div class="col-12">
+                    <div class="search">
+                        <form action="/data" method = "POST">
+                            <input id="search" type="search" class="srch" name="topic" placeholder="Enter your e-mail" color="white">
+                            <button type="submit" class="btn" id="submitbutton" onclick="submitForm(this);"
+                                    data-loading-text="<i class='fa fa-spinner fa-spin'></i>"
+                            >
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="returnHome">
+                <a href="/" class="returnHomeButton" >Home</a>
+            </div>
+        </div>
 
     </body>
 
