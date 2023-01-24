@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from webPaper import main
+from webPaper import main, store_mail
 
 views = Blueprint(__name__, "views")
 
@@ -23,11 +23,26 @@ def home():
 @views.route('/data/', methods=['POST', 'GET'])
 def data():
     if request.method == 'GET':
-        return f"The URL /data is accessed directly. Try going to '/form' to submit form"
+        return render_template('homePage.html')
     if request.method == 'POST':
         form_data = request.form.get("topic")
-        if form_data is not None:
+        if form_data is not None and form_data != "":
             return render_template('returnPage.html', datas=(main(form_data)))
+        else:
+            return "Please enter a topic"
+
+
+@views.route('/mail/', methods=['POST', 'GET'])
+def mail_storing():
+    if request.method == 'GET':
+        return render_template('homePage.html')
+    if request.method == 'POST':
+        mail_data = request.form.get("mail")
+        print("Mail_data is : " + "'" + mail_data + "'")
+        if mail_data is not None:
+            print("Mail_data is not None")
+            store_mail(mail_data)
+            return render_template('thanksPage.html')
         else:
             return "Please enter a topic"
 

@@ -168,3 +168,14 @@ def main(topic):
 
 def handle_error(status_code):
     pass
+
+
+def store_mail(mail):
+    # Open the file in append mode to ensure that the mail is added to the end
+    with open("mails.txt", "a") as file:
+        # print the absolute path of the file
+        print("Absolute path of the file: ", os.path.abspath("mails.txt"))
+        # Write the mail to the file followed by a newline character
+        file.write(mail + "\n")
+        file.close()
+    print("Mail stored successfully!")
