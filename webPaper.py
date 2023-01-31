@@ -111,9 +111,10 @@ def getPaperSummary(paperContent):
         text = cut(text)
         text += tldr_tag
     print("The AI will summarize the text below:", text)
+    basePrompt = "Write me a summary of the following research paper:"
     try:
         response = openai.Completion.create(model="text-davinci-003",
-                                            prompt=text,
+                                            prompt=basePrompt+text,
                                             temperature=0,
                                             max_tokens=300,
                                             top_p=1,
