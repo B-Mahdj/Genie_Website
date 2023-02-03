@@ -192,3 +192,10 @@ input {
     padding : 1%;
     font-size: 18px;
 }
+
+.creator {
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    margin-top: 20px;
+}
