@@ -11,34 +11,35 @@
         <div class="navbar">
         </div>
         <div class="content">
-            <h1>GENIE</h1>
-            <div class="navbar">
-                <div class="search">
-                    <form action="/data" method = "POST">
-			            <input id="search" type="search" class="srch" name="topic" placeholder="Search..." color="white">
-                        <button type="submit" class="btn" id="submitbutton" onclick="submitForm(this);"
-                                data-loading-text="<i class='fa fa-spinner fa-spin'></i>"
-                        >
-                            <i class="fa fa-search"></i>
-                        </button>
-		            </form>
+            <div class="titleContainer">
+                <h1>GENIE</h1>
+                <div class="searchContainer">
+                    <div class="search">
+                        <form action="/data" class="formContainer" method = "POST">
+                            <input id="search" type="search" class="srch" name="topic" placeholder="Search..." color="white">
+                            <button type="submit" class="btn" id="submitbutton" onclick="submitForm(this);"
+                                    data-loading-text="<i class='fa fa-spinner fa-spin'></i>"
+                            >
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <p class="par"> Search a field you are interested in, let us expand your knowledge </p>
+
+            </div>
+
+            <div class="btnContainer">
+                <a href="/tutorial" class="btnStyleBase tutorialButton">Tutorial</a>
+                <a href="/info" class="btnStyleBase infoButton">Interested in the project ?</a>
+            </div>
+
+            <div class="footerContainer">
+                <div class="creator">
+                    <a href="https://www.linkedin.com/in/bilal-mahdjoubi/" target="_blank"><img src="{{ url_for('static',filename='icons/linkedin.png') }}"></a>
+                    <p>Created by Bilal Mahdjoubi</p>
                 </div>
             </div>
-
-            <p class="par"> Search a field you are interested in, let us expand your knowledge </p>
-
-            <div class="tutorial">
-                <a href="/tutorial" class="tutorialButton">Tutorial</a>
-            </div>
-            <div class="info">
-                <a href="/info" class="infoButton">Interested in the project ?</a>
-            </div>
-
-            <div class="creator">
-                <p>Created by Bilal Mahdjoubi</p>
-                <a href="https://www.linkedin.com/in/bilal-mahdjoubi/">LinkedIn for DM</a>
-            </div>
-
         </div>
     </div>
 
