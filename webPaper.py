@@ -14,6 +14,7 @@ import json
 import os
 from dotenv import load_dotenv
 import reprlib
+from PyPDF2 import PdfReader
 
 load_dotenv()  # take environment variables from .env.
 
@@ -114,7 +115,7 @@ def getPaperSummary(paperContent):
     basePrompt = "Write me a summary of the following research paper:"
     try:
         response = openai.Completion.create(model="text-davinci-003",
-                                            prompt=basePrompt+text,
+                                            prompt=basePrompt + text,
                                             temperature=0,
                                             max_tokens=300,
                                             top_p=1,
@@ -140,7 +141,7 @@ def cut(text):
         return text[:CHARACTER_LIMIT]
 
 
-def main(topic):
+def getSummariesForTopic(topic):
     # Get the papers from the topic
     papersTitle, papersTexts, papersUrl = get_papers(topic)
     print("The papers title are:")
@@ -164,6 +165,18 @@ def main(topic):
 
     print("The papers info and summaries are:", papersInfoAndSummaries)
     # Transform the papersInfoAndSummaries array into a json for html return
+    return papersInfoAndSummaries
+
+
+def getSummariesForFile(filename):
+    # Read the pdf file and get the full text content of the file
+    reader = PdfReader(filename)
+    # While loop len reader.pages
+    fileTextContent = ""
+    for i in range(len(reader.pages)):
+        fileTextContent += reader.pages[i].extract_text()
+
+    papersInfoAndSummaries = [{"Title": "Your paper", "Url": "", "summary": getPaperSummary(fileTextContent)}]
     return papersInfoAndSummaries
 
 

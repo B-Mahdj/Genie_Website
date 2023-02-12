@@ -1,7 +1,13 @@
+import os
+
 from flask import Blueprint, render_template, request
-from webPaper import main, store_mail
+from werkzeug.utils import secure_filename
+
+from webPaper import getSummariesForTopic, store_mail, getSummariesForFile
 
 views = Blueprint(__name__, "views")
+UPLOAD_FOLDER = os.path.abspath("./pdfs")
+ALLOWED_EXTENSIONS = {'pdf'}
 
 
 def pretty_return(return_value):
@@ -27,7 +33,7 @@ def data():
     if request.method == 'POST':
         form_data = request.form.get("topic")
         if form_data is not None and form_data != "":
-            return render_template('returnPage.html', datas=(main(form_data)))
+            return render_template('returnPage.html', datas=(getSummariesForTopic(form_data)))
         else:
             return "Please enter a topic"
 
@@ -55,3 +61,30 @@ def tutorial():
 @views.route('/info')
 def info():
     return render_template('infoPage.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@views.route('/upload', methods=['POST', 'GET'])
+def upload():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'filename' not in request.files:
+            print('No file part')
+            return render_template('homePage.html')
+        file = request.files['filename']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            print('No selected file')
+            return render_template('homePage.html')
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            fileFullPath = os.path.join(UPLOAD_FOLDER, os.sep, filename)
+            file.save(fileFullPath)
+            return render_template('returnPage.html', datas=(getSummariesForFile(fileFullPath)))
+    else:
+        return render_template('homePage.html')
