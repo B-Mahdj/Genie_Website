@@ -27,6 +27,16 @@
                 </div>
                 <p class="par"> Search a field you are interested in, let us expand your knowledge </p>
 
+                <p class="orText">OR</p>
+                <p class="uploadPaperText">Upload your paper here </p>
+
+                <form action="/upload">
+                  <input type="file" id="fileButton" name="filename" hidden>
+                    <label for="fileButton">Choose Paper</label>
+                    <span id="fileChosen">No file chosen</span>
+                    <br>
+                  <input type="submit">
+                </form>
             </div>
 
             <div class="btnContainer">
@@ -53,6 +63,13 @@
             btn.value="Submitting";
             // submit form
         }
+        const actualBtn = document.getElementById('fileButton');
+
+        const fileChosen = document.getElementById('fileChosen');
+
+        actualBtn.addEventListener('change', function(){
+          fileChosen.textContent = 	"✓";
+        })
     </script>
 </body>
 </html>

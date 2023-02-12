@@ -63,8 +63,6 @@ body{
     outline: none;
 }
 
-
-
 .btn{
     width: 30%;
     height: 50px;
@@ -129,7 +127,53 @@ input {
     text-align: center;
 }
 
+.orText{
+    color: #fff;
+    font-size: 30px;
+    padding-top: 30px;
+    transition: 0.3s ease;
+    text-align: center;
+}
+
+.uploadPaperText{
+    color: #fff;
+    font-size: 30px;
+    padding-top: 20px;
+    transition: 0.3s ease;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+label {
+    padding: 10px 20px 10px 20px;
+    border: 2px solid #ffffff;
+    color: white;
+    transition: 0.2s ease;
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 20px;
+    width: 75%;
+    text-align: center;
+    transition: all ease 0.5s;
+}
+
+#fileChosen{
+  margin-left: 0.3rem;
+  font-family: sans-serif;
+}
+
+input[type=submit] {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background:#ccc;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
 .btnContainer{
+    padding-top: 20px;
     width: 20%;
     display: flex;
     flex-direction: column;
