@@ -1,7 +1,7 @@
 import os
 
+from PyPDF2 import PdfReader
 from flask import Blueprint, render_template, request
-from werkzeug.utils import secure_filename
 
 from webPaper import getSummariesForTopic, store_mail, getSummariesForFile
 
@@ -82,9 +82,11 @@ def upload():
             print('No selected file')
             return render_template('homePage.html')
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            fileFullPath = os.path.join(UPLOAD_FOLDER, os.sep, filename)
-            file.save(fileFullPath)
-            return render_template('returnPage.html', datas=(getSummariesForFile(fileFullPath)))
+            reader = PdfReader(file)
+            # While loop len reader.pages
+            fileTextContent = ""
+            for i in range(len(reader.pages)):
+                fileTextContent += reader.pages[i].extract_text()
+            return render_template('returnPage.html', datas=(getSummariesForFile(fileTextContent)))
     else:
         return render_template('homePage.html')

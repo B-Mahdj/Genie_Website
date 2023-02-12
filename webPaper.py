@@ -6,15 +6,15 @@ Created on Sat Jul  9 16:07:46 2022
 @author: sohanjs, Mahdjoubi Bilal
 """
 
-# Import the libraries
-import requests
-import openai
-import re
 import json
 import os
-from dotenv import load_dotenv
+import re
 import reprlib
-from PyPDF2 import PdfReader
+
+import openai
+# Import the libraries
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
 
@@ -168,15 +168,8 @@ def getSummariesForTopic(topic):
     return papersInfoAndSummaries
 
 
-def getSummariesForFile(filename):
-    # Read the pdf file and get the full text content of the file
-    reader = PdfReader(filename)
-    # While loop len reader.pages
-    fileTextContent = ""
-    for i in range(len(reader.pages)):
-        fileTextContent += reader.pages[i].extract_text()
-
-    papersInfoAndSummaries = [{"Title": "Your paper", "Url": "", "summary": getPaperSummary(fileTextContent)}]
+def getSummariesForFile(fileContent):
+    papersInfoAndSummaries = [{"Title": "Your paper", "Url": "", "summary": getPaperSummary(fileContent)}]
     return papersInfoAndSummaries
 
 

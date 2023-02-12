@@ -4,5 +4,4 @@ openai==0.26.5
 gunicorn==20.1.0
 python-dotenv==0.21.1
 flask_bootstrap~=3.3.7
-Werkzeug~=2.2.2
 pypdf2~=3.0.1
